@@ -1,25 +1,22 @@
-%global opt %(test -x %{_bindir}/ocamlopt && echo 1 || echo 0)
-# On s/390x, ocamlfind is still built using -custom option, so it must
-# not be stripped.  See:
-# https://fedoraproject.org/wiki/Packaging:OCaml?rd=Packaging/OCaml#Stripping_binaries
-%if !%opt
-%global __strip /bin/true
-%global debug_package %{nil}
-%endif
-
-
 Name:           ocaml-findlib
 Version:        1.7.3
-Release:        2%{?dist}
+Release:        10%{?dist}
 Summary:        Objective CAML package manager and build helper
 License:        BSD
 
 URL:            http://projects.camlcity.org/projects/findlib.html
-Source0:        https://repo.citrite.net:443/ctx-local-contrib/xs-opam/findlib-%{version}.tar.gz
+Source0:        https://repo.citrite.net:443/ctx-local-contrib/xs-opam/findlib-1.7.3.tar.gz
+
+# Use ocamlopt -g patch to include debug information.
+Patch1:         findlib-1.4-add-debug.patch
+
+# Upstream patch to fix detection of "num" package.
+Patch2:         findlib-fix-reinstallation-of-num-for-ocaml-4.06.patch
 
 BuildRequires:  ocaml >= 4.02.0
 BuildRequires:  ocaml-camlp4-devel
 BuildRequires:  ocaml-ocamlbuild-devel
+#BuildRequires:  ocaml-num-devel
 BuildRequires:  ocaml-compiler-libs
 BuildRequires:  ocaml-ocamldoc
 BuildRequires:  m4, ncurses-devel
@@ -45,6 +42,8 @@ developing applications that use %{name}.
 
 %prep
 %setup -q -n findlib-%{version}
+%patch1 -p2
+%patch2 -p1
 
 
 %build
@@ -59,9 +58,7 @@ cat src/findlib/ocaml_args.ml
   -mandir %{_mandir} \
   -with-toolbox
 make all
-%if %opt
 make opt
-%endif
 rm doc/guide-html/TIMESTAMP
 
 
@@ -84,30 +81,52 @@ make install \
 %{_libdir}/ocaml/*/META
 %{_libdir}/ocaml/topfind
 %{_libdir}/ocaml/findlib
-%if %opt
 %exclude %{_libdir}/ocaml/findlib/*.a
 %exclude %{_libdir}/ocaml/findlib/*.cmxa
-%endif
 %exclude %{_libdir}/ocaml/findlib/*.mli
 %exclude %{_libdir}/ocaml/findlib/Makefile.config
 %exclude %{_libdir}/ocaml/findlib/make_wizard
 %exclude %{_libdir}/ocaml/findlib/make_wizard.pattern
-%{_libdir}/ocaml/num-top
+# Had to disable this in OCaml 4.06, unclear why.
+#%%{_libdir}/ocaml/num-top
 
 
 %files devel
 %doc LICENSE doc/README doc/guide-html
-%if %opt
 %{_libdir}/ocaml/findlib/*.a
 %{_libdir}/ocaml/findlib/*.cmxa
-%endif
 %{_libdir}/ocaml/findlib/*.mli
 %{_libdir}/ocaml/findlib/Makefile.config
 
 
 %changelog
-* Wed Feb 21 2018 Marcello Seri <marcello.seri@citrix.com> - 1.7.3-2
-- Remove unnecessary patch
+* Thu Feb 08 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.7.3-10
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Wed Nov 08 2017 Richard W.M. Jones <rjones@redhat.com> - 1.7.3-9
+- Bump release and rebuild.
+
+* Wed Nov 08 2017 Richard W.M. Jones <rjones@redhat.com> - 1.7.3-8
+- BR ocaml-num-devel (unfortunately a circular dependency).
+
+* Tue Nov 07 2017 Richard W.M. Jones <rjones@redhat.com> - 1.7.3-7
+- OCaml 4.06.0 rebuild.
+
+* Fri Sep 22 2017 Richard W.M. Jones <rjones@redhat.com> - 1.7.3-6
+- Enable stripping and debuginfo on s390x.
+- Use ocaml_native_compiler macro instead of opt test.
+
+* Mon Aug 07 2017 Richard W.M. Jones <rjones@redhat.com> - 1.7.3-5
+- OCaml 4.05.0 rebuild.
+
+* Thu Aug 03 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.7.3-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
+
+* Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.7.3-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
+* Mon Jun 26 2017 Richard W.M. Jones <rjones@redhat.com> - 1.7.3-2
+- OCaml 4.04.2 rebuild.
 
 * Mon Jun  5 2017 Richard W.M. Jones <rjones@redhat.com> - 1.7.3-1
 - New upstream version 1.7.3.
