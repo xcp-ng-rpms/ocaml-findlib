@@ -1,22 +1,17 @@
 Name:           ocaml-findlib
-Version:        1.7.3
-Release:        10%{?dist}
+Version:        1.8.0
+Release:        1%{?dist}
 Summary:        Objective CAML package manager and build helper
 License:        BSD
 
 URL:            http://projects.camlcity.org/projects/findlib.html
-Source0:        https://repo.citrite.net:443/ctx-local-contrib/xs-opam/findlib-1.7.3.tar.gz
 
-# Use ocamlopt -g patch to include debug information.
-Patch1:         findlib-1.4-add-debug.patch
+Source0: https://repo.citrite.net:443/ctx-local-contrib/xs-opam/findlib-1.8.0.tar.gz
 
-# Upstream patch to fix detection of "num" package.
-Patch2:         findlib-fix-reinstallation-of-num-for-ocaml-4.06.patch
+
+
 
 BuildRequires:  ocaml >= 4.02.0
-BuildRequires:  ocaml-camlp4-devel
-BuildRequires:  ocaml-ocamlbuild-devel
-#BuildRequires:  ocaml-num-devel
 BuildRequires:  ocaml-compiler-libs
 BuildRequires:  ocaml-ocamldoc
 BuildRequires:  m4, ncurses-devel
@@ -41,17 +36,10 @@ developing applications that use %{name}.
 
 
 %prep
-%setup -q -n findlib-%{version}
-%patch1 -p2
-%patch2 -p1
+%autosetup -p1 -n findlib-%{version}
 
 
 %build
-ocamlc -version
-ocamlc -where
-(cd tools/extract_args && make)
-tools/extract_args/extract_args -o src/findlib/ocaml_args.ml ocamlc ocamlcp ocamlmktop ocamlopt ocamldep ocamldoc ||:
-cat src/findlib/ocaml_args.ml
 ./configure -config %{_sysconfdir}/ocamlfind.conf \
   -bindir %{_bindir} \
   -sitelib `ocamlc -where` \
@@ -100,6 +88,9 @@ make install \
 
 
 %changelog
+* Wed Nov 28 2018 Christian Lindig <christian.lindig@citrix.com> - 1.8.0-1
+- Use 1.8.0
+
 * Thu Feb 08 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.7.3-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
