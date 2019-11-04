@@ -1,17 +1,21 @@
 Name:           ocaml-findlib
 Version:        1.7.3
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        Objective CAML package manager and build helper
 License:        BSD
 
 URL:            http://projects.camlcity.org/projects/findlib.html
-Source0:        https://repo.citrite.net:443/ctx-local-contrib/xs-opam/findlib-1.7.3.tar.gz
+
+Source0: https://repo.citrite.net:443/ctx-local-contrib/xs-opam/findlib-1.7.3.tar.gz
+Patch1: SOURCES/ocaml-findlib/findlib-1.4-add-debug.patch
+Patch2: SOURCES/ocaml-findlib/findlib-fix-reinstallation-of-num-for-ocaml-4.06.patch
+
+
+
 
 # Use ocamlopt -g patch to include debug information.
-Patch1:         findlib-1.4-add-debug.patch
 
 # Upstream patch to fix detection of "num" package.
-Patch2:         findlib-fix-reinstallation-of-num-for-ocaml-4.06.patch
 
 BuildRequires:  ocaml >= 4.02.0
 BuildRequires:  ocaml-camlp4-devel
@@ -42,8 +46,7 @@ developing applications that use %{name}.
 
 %prep
 %setup -q -n findlib-%{version}
-%patch1 -p2
-%patch2 -p1
+%autopatch -p1
 
 
 %build

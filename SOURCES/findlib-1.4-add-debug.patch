@@ -1,5 +1,5 @@
---- ./findlib-1.4/src/findlib/Makefile.old	2013-09-13 22:13:25.322978268 +0100
-+++ ./findlib-1.4/src/findlib/Makefile	2013-09-13 22:13:38.289999908 +0100
+--- a/src/findlib/Makefile	2013-09-13 22:13:25.322978268 +0100
++++ b/src/findlib/Makefile	2013-09-13 22:13:38.289999908 +0100
 @@ -14,7 +14,7 @@
  
  # Need compiler-libs since ocaml-4.00
