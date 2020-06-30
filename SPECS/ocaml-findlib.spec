@@ -1,6 +1,6 @@
 Name:           ocaml-findlib
 Version:        1.8.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Objective CAML package manager and build helper
 License:        BSD
 
