@@ -1,12 +1,12 @@
 Name:           ocaml-findlib
-Version:        1.8.0
-Release:        2%{?dist}
+Version:        1.8.1
+Release:        1%{?dist}
 Summary:        Objective CAML package manager and build helper
 License:        BSD
 
 URL:            http://projects.camlcity.org/projects/findlib.html
 
-Source0: https://repo.citrite.net:443/ctx-local-contrib/xs-opam/findlib-1.8.0.tar.gz
+Source0: http://download.camlcity.org/download/findlib-1.8.1.tar.gz
 
 
 
@@ -88,6 +88,9 @@ make install \
 
 
 %changelog
+* Fri Jan 08 2021 Pau Ruiz Safont <pau.safont@citrix.com> - 1.8.1-1
+- Use 1.8.1
+
 * Wed Nov 28 2018 Christian Lindig <christian.lindig@citrix.com> - 1.8.0-1
 - Use 1.8.0
 
