@@ -1,21 +1,23 @@
+%global package_speccommit ada86385aad2f490c09e67cd02c178ffe60b3032
+%global usver 1.9.3
+%global xsver 2
+%global xsrel %{xsver}%{?xscount}%{?xshash}
+
 Name:           ocaml-findlib
-Version:        1.8.0
-Release:        2%{?dist}
+Version:        1.9.3
+Release:        %{?xsrel}%{?dist}
 Summary:        Objective CAML package manager and build helper
-License:        BSD
+License:        MIT
 
 URL:            http://projects.camlcity.org/projects/findlib.html
-
-Source0: https://repo.citrite.net:443/ctx-local-contrib/xs-opam/findlib-1.8.0.tar.gz
-
-
-
+Source0: findlib-1.9.3.tar.gz
 
 BuildRequires:  ocaml >= 4.02.0
 BuildRequires:  ocaml-compiler-libs
 BuildRequires:  ocaml-ocamldoc
 BuildRequires:  m4, ncurses-devel
 BuildRequires:  gawk
+BuildRequires:  make
 Requires:       ocaml
 
 %global __ocaml_requires_opts -i Asttypes -i Parsetree
@@ -27,7 +29,7 @@ Objective CAML package manager and build helper.
 
 %package        devel
 Summary:        Development files for %{name}
-Requires:       %{name} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 
 %description    devel
@@ -88,6 +90,37 @@ make install \
 
 
 %changelog
+* Wed Feb 02 2022 Pau Ruiz Safont <pau.safont@citrix.com> - 1.9.3-2
+- Use 1.9.3
+- Change license to MIT
+
+* Tue Jan 11 2022 Rob Hoes <rob.hoes@citrix.com> - 1.8.1-7
+- Bump release and rebuild
+
+* Tue Dec 07 2021 Rob Hoes <rob.hoes@citrix.com> - 1.8.1-6
+- Bump release and rebuild
+
+* Fri Dec 03 2021 Rob Hoes <rob.hoes@citrix.com> - 1.8.1-5
+- Bump release and rebuild
+
+* Fri Dec 03 2021 Rob Hoes <rob.hoes@citrix.com> - 1.8.1-4
+- Bump release and rebuild
+
+* Fri Feb 26 2021 Rob Hoes <rob.hoes@citrix.com> - 1.8.1-3
+- Bump release to rebuild
+
+* Fri Dec 18 2020 Pau Ruiz Safont <pau.safont@citrix.com> - 1.8.1-2
+- Bump for ocaml 4.10.1
+
+* Fri Nov 27 2020 Pau Ruiz Safont <pau.safont@citrix.com> - 1.8.1-1
+- Use 1.8.1
+
+* Tue Nov 17 2020 Mark Syms <mark.syms@citrix.com> - 1.8.0-3
+- Packaging updates
+
+* Tue Jan 14 2020 Tim Smith <tim.smith@citrix.com> - 1.8.0-2
+- Rebuild for ocaml-4.08
+
 * Wed Nov 28 2018 Christian Lindig <christian.lindig@citrix.com> - 1.8.0-1
 - Use 1.8.0
 
