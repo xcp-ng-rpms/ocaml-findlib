@@ -1,6 +1,6 @@
-%global package_speccommit ada86385aad2f490c09e67cd02c178ffe60b3032
+%global package_speccommit 461d77e4810b6cc2ee7b5c692d15d82911aceb1b
 %global usver 1.9.3
-%global xsver 2
+%global xsver 3
 %global xsrel %{xsver}%{?xscount}%{?xshash}
 
 Name:           ocaml-findlib
@@ -90,6 +90,9 @@ make install \
 
 
 %changelog
+* Thu Aug 04 2022 Pau Ruiz Safont <pau.safont@citrix.com> - 1.9.3-3
+- Bump release and rebuild
+
 * Wed Feb 02 2022 Pau Ruiz Safont <pau.safont@citrix.com> - 1.9.3-2
 - Use 1.9.3
 - Change license to MIT
