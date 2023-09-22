@@ -12,6 +12,8 @@ License:        MIT
 URL:            http://projects.camlcity.org/projects/findlib.html
 Source0: findlib-1.9.6.tar.gz
 
+BuildRequires:  gcc
+
 BuildRequires:  ocaml >= 4.02.0
 BuildRequires:  ocaml-compiler-libs
 BuildRequires:  ocaml-ocamldoc
