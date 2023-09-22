@@ -1,16 +1,16 @@
-%global package_speccommit 461d77e4810b6cc2ee7b5c692d15d82911aceb1b
-%global usver 1.9.3
-%global xsver 3
+%global package_speccommit f15ef7c26e64e0039a90c79ba0e953ec4e62f5a9
+%global usver 1.9.6
+%global xsver 2
 %global xsrel %{xsver}%{?xscount}%{?xshash}
 
 Name:           ocaml-findlib
-Version:        1.9.3
+Version:        1.9.6
 Release:        %{?xsrel}%{?dist}
 Summary:        Objective CAML package manager and build helper
 License:        MIT
 
 URL:            http://projects.camlcity.org/projects/findlib.html
-Source0: findlib-1.9.3.tar.gz
+Source0: findlib-1.9.6.tar.gz
 
 BuildRequires:  ocaml >= 4.02.0
 BuildRequires:  ocaml-compiler-libs
@@ -90,6 +90,12 @@ make install \
 
 
 %changelog
+* Mon Jul 17 2023 Edwin Török <edwin.torok@cloud.com> - 1.9.6-2
+- Bump release and rebuild
+
+* Fri May 05 2023 Pau Ruiz Safont <pau.ruizsafont@cloud.com> - 1.9.6-1
+- Use 1.9.6
+
 * Thu Aug 04 2022 Pau Ruiz Safont <pau.safont@citrix.com> - 1.9.3-3
 - Bump release and rebuild
 
