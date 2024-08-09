@@ -1,6 +1,6 @@
-%global package_speccommit f15ef7c26e64e0039a90c79ba0e953ec4e62f5a9
+%global package_speccommit f84c6bcb734a24ac2813d14f98c641bbca414ef8
 %global usver 1.9.6
-%global xsver 2
+%global xsver 3
 %global xsrel %{xsver}%{?xscount}%{?xshash}
 
 Name:           ocaml-findlib
@@ -92,6 +92,9 @@ make install \
 
 
 %changelog
+* Fri May 31 2024 Pau Ruiz Safont <pau.ruizsafont@cloud.com> - 1.9.6-3
+- Bump release and rebuild
+
 * Mon Jul 17 2023 Edwin Török <edwin.torok@cloud.com> - 1.9.6-2
 - Bump release and rebuild
 
