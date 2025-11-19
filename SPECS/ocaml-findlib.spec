@@ -1,16 +1,17 @@
-%global package_speccommit f84c6bcb734a24ac2813d14f98c641bbca414ef8
-%global usver 1.9.6
-%global xsver 3
+%global package_speccommit 6a7dad34c7104f909a70bf475858100b8dda0a49
+%global usver 1.9.8
+%global xsver 1
 %global xsrel %{xsver}%{?xscount}%{?xshash}
 
 Name:           ocaml-findlib
-Version:        1.9.6
+Version:        1.9.8
 Release:        %{?xsrel}%{?dist}
 Summary:        Objective CAML package manager and build helper
 License:        MIT
 
 URL:            http://projects.camlcity.org/projects/findlib.html
-Source0: findlib-1.9.6.tar.gz
+Source0: findlib-1.9.8.tar.gz
+Patch0: ocaml-findlib-toolbox.patch
 
 BuildRequires:  gcc
 
@@ -22,8 +23,8 @@ BuildRequires:  gawk
 BuildRequires:  make
 Requires:       ocaml
 
-%global __ocaml_requires_opts -i Asttypes -i Parsetree
-
+# Do not require ocaml-compiler-libs at runtime
+%global __ocaml_requires_opts -i Asttypes -i Build_path_prefix_map -i Cmi_format -i Env -i Ident -i Identifiable -i Load_path -i Location -i Longident -i Misc -i Outcometree -i Parsetree -i Path -i Primitive -i Shape -i Subst -i Topdirs -i Toploop -i Type_immediacy -i Types -i Warnings
 
 %description
 Objective CAML package manager and build helper.
@@ -42,9 +43,28 @@ developing applications that use %{name}.
 %prep
 %autosetup -p1 -n findlib-%{version}
 
+# Fix character encoding
+iconv -f ISO8859-1 -t UTF-8 doc/README > doc/README.utf8
+touch -r doc/README doc/README.utf8
+mv doc/README.utf8 doc/README
+
+# Fix the OCaml core man directory
+sed -i 's,/usr/local/man,%{_mandir},' configure
+
+# Build an executable that is not damaged by stripping
+sed -i 's/\(custom=\)-custom/\1-output-complete-exe/' configure
+
+# Skip broken test for ocamlopt -g
+sed -i '/^ocamlopt -g/d' configure
+
 
 %build
-./configure -config %{_sysconfdir}/ocamlfind.conf \
+ocamlc -version
+ocamlc -where
+(cd tools/extract_args && make)
+tools/extract_args/extract_args -o src/findlib/ocaml_args.ml ocamlc ocamlcp ocamlmktop ocamlopt ocamldep ocamldoc ||:
+cat src/findlib/ocaml_args.ml
+./configure -config %{_sysconfdir}/findlib.conf \
   -bindir %{_bindir} \
   -sitelib `ocamlc -where` \
   -mandir %{_mandir} \
@@ -55,18 +75,21 @@ rm doc/guide-html/TIMESTAMP
 
 
 %install
-# Grrr destdir grrrr
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man{1,5}
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}
 make install \
      prefix=$RPM_BUILD_ROOT \
      OCAMLFIND_BIN=%{_bindir} \
+     OCAMLFIND_CONF=%{_sysconfdir} \
      OCAMLFIND_MAN=%{_mandir}
+rmdir $RPM_BUILD_ROOT%{_mandir}/man3
+
 
 
 %files
 %doc LICENSE doc/README
-%config(noreplace) %{_sysconfdir}/ocamlfind.conf
+%config(noreplace) %{_sysconfdir}/findlib.conf
 %{_bindir}/*
 %{_mandir}/man1/*
 %{_mandir}/man5/*
@@ -77,8 +100,6 @@ make install \
 %exclude %{_libdir}/ocaml/findlib/*.cmxa
 %exclude %{_libdir}/ocaml/findlib/*.mli
 %exclude %{_libdir}/ocaml/findlib/Makefile.config
-%exclude %{_libdir}/ocaml/findlib/make_wizard
-%exclude %{_libdir}/ocaml/findlib/make_wizard.pattern
 # Had to disable this in OCaml 4.06, unclear why.
 #%%{_libdir}/ocaml/num-top
 
@@ -92,6 +113,9 @@ make install \
 
 
 %changelog
+* Fri Oct 10 2025 Rob Hoes <rob.hoes@citrix.com> - 1.9.8-1
+- Use 1.9.8
+
 * Fri May 31 2024 Pau Ruiz Safont <pau.ruizsafont@cloud.com> - 1.9.6-3
 - Bump release and rebuild
 
