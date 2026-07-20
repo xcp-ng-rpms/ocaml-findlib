@@ -5,7 +5,7 @@
 
 Name:           ocaml-findlib
 Version:        1.9.8
-Release:        %{?xsrel}.1%{?dist}
+Release:        %{?xsrel}.1~newocaml.2%{?dist}
 Summary:        Objective CAML package manager and build helper
 License:        MIT
 
